@@ -1,0 +1,45 @@
+$facebook = new Facebook(array(
+  'appId'  => '112976585524785',
+  'secret' => '3c122deb4910d55e4d23ea8a7aed4c17',
+));
+
+// Get User ID
+
+
+$user = $facebook->getUser();
+if ($user) {
+  try {
+    // Get the user profile data you have permission to view
+    $user_profile = $facebook->api('/me');
+    $uid = $facebook->getUser();
+
+
+      $url = $facebook->getLoginUrl(array(
+    'canvas' => 1,
+    'fbconnect' => 0,
+    'req_perms' => 'email,publish_stream,status_update,user_birthday,user_location,user_work_history'));
+
+
+    $attachment = array
+ (
+ 'access_token'=>$facebook->getAccessToken(),
+ 'message' => 'I had a question: should I write a PHP facebook app that actually worked?',
+ 'name' => 'I Asked Bert',
+ 'caption' => 'Bert replied:',
+ 'link' => 'http://apps.facebook.com/askbert/',
+ 'description' => 'NO',
+ 'picture' => 'http://www.facebookanswers.co.uk/img/misc/question.jpg'
+ );
+ echo "Test 1"; 
+
+$result = $facebook->api('/me/feed/','post',$attachment);
+
+    echo "Test 2"; 
+    $_SESSION['userID'] = $uid;
+
+
+  } catch (FacebookApiException $e) {
+    $user = null;
+  }
+} else {
+  die('Somethign Strange just happened <script>top.location.href="'.$facebook->getLoginUrl().'";</script>');
